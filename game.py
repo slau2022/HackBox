@@ -92,7 +92,15 @@ class HackBox():
         label = myfont.render("Loading...", 1, (255, 255, 255))
         # put the label object on the screen at point x=100, y=100
         self.screen.blit(label, (WIDTH / 2, 0))
-
+        
+    def firstScreen(self):
+        basicfont = pg.font.SysFont(None, 48)
+        text = basicfont.render('Question:', False,(255, 255, 255),(0,0,0))
+        textrect = text.get_rect()
+        textrect.centerx = self.width
+        textrect.centery = 50
+        self.screen.blit(text, textrect)
+        
     def update(self):
         self.clock.tick(60)
 
