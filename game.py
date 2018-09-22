@@ -19,13 +19,13 @@ class HackBox():
         self.max_msg = 25;
 
     def loadingScreen(self):
-        pygame.draw.rect(self.screen, 0, (50,50,100,100), 0)
+        pg.draw.rect(self.screen, 0, (50, 50, 100, 100), 0)
         myfont = pg.font.SysFont("Comic Sans MS", 30)
         # apply it to text on a label
-        label = myfont.render("Loading...", 1, (255,255,255))
+        label = myfont.render("Loading...", 1, (255, 255, 255))
         # put the label object on the screen at point x=100, y=100
-        self.screen.blit(label, (100, 100))
-    
+        self.screen.blit(label, (300, 0))
+
     def update(self):
         self.clock.tick(60)
 
@@ -65,7 +65,7 @@ class HackBox():
             msg_surface = self.font.render(msg[0:20], True, self.color)
             msg_surface2 = self.font.render(msg[20:40], True, self.color)
             self.screen.blit(msg_surface, (0, y))
-            if len(msg) > 20 :
+            if len(msg) > 20:
                 y += 20
             self.screen.blit(msg_surface2, (0, y))
             y += 20
@@ -73,6 +73,8 @@ class HackBox():
         if pg.mouse.get_pressed()[0]:
             pos = pg.mouse.get_pos()
             pg.draw.rect(self.screen, (255, 0, 0), (pos[0] - 5, pos[1] - 5, 10, 10), 0)
+
+        hb.loadingScreen()
         pg.display.flip()
 
 
