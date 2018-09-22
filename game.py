@@ -92,15 +92,23 @@ class HackBox():
     def introScreen(self):
         label = FONT.render("Please enter a username below", 1, (255, 255, 255))
         self.screen.blit(label, (0, 0))
-
+    
     def loadingScreen(self):
-        pg.draw.rect(self.screen, 0, (50, 50, 100, 100), 0)
-        myfont = pg.font.SysFont("Comic Sans MS", 30)
-        # apply it to text on a label
-        label = myfont.render("Loading...", 1, (255, 255, 255))
-        # put the label object on the screen at point x=100, y=100
-        self.screen.blit(label, (WIDTH / 2, 0))
-
+        basicfont = pg.font.SysFont(None, 48)
+        myfont = basicfont.render("Loading:",False,(255,255,255),(0,0,0))
+        textrect = myfont.get_rect()
+        textrect.centerx = WIDTH*3/4
+        textrect.centery = 50
+        self.screen.blit(myfont, textrect)
+    
+    def firstScreen(self):
+        basicfont = pg.font.SysFont(None, 48)
+        text = basicfont.render('Question:', False,(255, 255, 255),(0,0,0))
+        textrect = text.get_rect()
+        textrect.centerx = WIDTH/4
+        textrect.centery = 50
+        self.screen.blit(text, textrect)
+       
     def update(self):
         self.clock.tick(60)
 
