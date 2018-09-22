@@ -58,7 +58,7 @@ class InputBox:
     def draw(self, screen):
         screen.blit(self.txt_surface, (self.input_box.x + 5, self.input_box.y + 5))
         screen.blit(self.txt_surface2, (self.input_box.x + 5, self.input_box.y + 37))
-        if self.mx >= 0 and self.my >= 0
+        if self.mx >= 0 and self.my >= 0:
             # if self.c:
             y = self.my;
             for msg in self.log:
@@ -99,9 +99,9 @@ class HackBox():
         self.screen.blit(label, (0, 0))
 
     def phase1(self):
-
+        pass
     def phase2(self):
-
+        pass
     def phase3(self):
         playerRects = list()
         playerNames = list()
@@ -110,14 +110,16 @@ class HackBox():
         for player in self.players:
             playerRects.append(pg.Rect(x, y, WIDTH / 5, 20))
             playerNames.append(FONT.render(player, 1, (255, 255, 255)))
-            
+
             y += 40
 
 
     def phase4(self):
         #Very similar to phase2. Maybe just copy paste most of it
+        pass
 
     def phase5(self):
+        pass
 
     def loadingScreen(self):
         pg.draw.rect(self.screen, 0, (50, 50, 100, 100), 0)
@@ -143,10 +145,11 @@ class HackBox():
                     self.state += 1
             self.username_input.update()
             self.username_input.draw(self.screen)
-            
+
         elif self.state == 1:
-            
+            pass
         elif self.state == 2:
+            pass
 
         elif self.state == 3:
             self.phase3()
@@ -154,10 +157,13 @@ class HackBox():
                 if event.type == pg.QUIT:
                     exit()
                 elif event.type == pg.MOUSEBUTTONDOWN:
-                    
+                    pass
+
         elif self.state == 4:
-            
+            pass
+
         elif self.state == 5:
+            pass
 
         else:
             for event in pg.event.get():
