@@ -42,10 +42,12 @@ class InputBox:
                     if len(self.log) > self.max_msg:
                         self.log.pop(0)
                     self.text = ''
+                    return 1
                 elif event.key == pg.K_BACKSPACE:
                     self.text = self.text[:-1]
                 elif len(self.text) < 60:
                     self.text += event.unicode
+        return 0
 
     def update(self):
         # Render the current text.
@@ -82,8 +84,13 @@ class HackBox():
         pg.display.set_caption("Hackbox")
         self.clock = pg.time.Clock()
         self.chat_box = InputBox(0, HEIGHT - 64, WIDTH / 2, 64, True, 0, 0)
-        self.username_input = InputBox(WIDTH / 2, HEIGHT - 64, WIDTH / 2, 64, False, WIDTH / 2, HEIGHT / 2)
-        self.input_boxes = [self.chat_box, self.username_input]
+        self.question_input = InputBox(WIDTH / 2, HEIGHT - 64, WIDTH / 2, 64, False, WIDTH / 2, HEIGHT / 2)
+        self.username_input = InputBox(0, HEIGHT - 64, WIDTH / 2, 64, False, WIDTH / 2, HEIGHT / 2)
+        self.input_boxes = [self.chat_box, self.question_input]
+
+    def introScreen(self):
+        label = FONT.render("Please enter a username below", 1, (255, 255, 255))
+        self.screen.blit(label, (0, 0))
 
     def loadingScreen(self):
         pg.draw.rect(self.screen, 0, (50, 50, 100, 100), 0)
@@ -98,22 +105,32 @@ class HackBox():
 
         self.screen.fill(0)
 
-        for event in pg.event.get():
-            if event.type == pg.QUIT:
-                exit()
+        if self.state == 0:
+            hb.introScreen()
+            for event in pg.event.get():
+                if event.type == pg.QUIT:
+                    exit()
+                if self.username_input.handle_event(event):
+                    self.state += 1
+            self.username_input.update()
+            self.username_input.draw(self.screen)
+
+        else:
+            for event in pg.event.get():
+                if event.type == pg.QUIT:
+                    exit()
+                for box in self.input_boxes:
+                    box.handle_event(event)
+
             for box in self.input_boxes:
-                box.handle_event(event)
+                box.update()
 
-        for box in self.input_boxes:
-            box.update()
+            if pg.mouse.get_pressed()[0]:
+                pos = pg.mouse.get_pos()
+                pg.draw.rect(self.screen, (255, 0, 0), (pos[0] - 5, pos[1] - 5, 10, 10), 0)
 
-        if pg.mouse.get_pressed()[0]:
-            pos = pg.mouse.get_pos()
-            pg.draw.rect(self.screen, (255, 0, 0), (pos[0] - 5, pos[1] - 5, 10, 10), 0)
-
-        hb.loadingScreen()
-        for box in self.input_boxes:
-            box.draw(self.screen)
+            for box in self.input_boxes:
+                box.draw(self.screen)
         pg.display.flip()
 
 
