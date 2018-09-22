@@ -3,6 +3,8 @@ import pygame as pg
 pg.init()
 COLOR_INACTIVE = pg.Color('lightskyblue3')
 COLOR_ACTIVE = pg.Color('dodgerblue2')
+WIDTH = 1400
+HEIGHT = 700
 FONT = pg.font.Font(None, 32)
 
 
@@ -17,7 +19,7 @@ class InputBox:
         self.txt_surface2 = FONT.render(text, True, self.color)
         self.active = False
         self.log = list()
-        self.max_msg = 25;
+        self.max_msg = 27;
 
     def handle_event(self, event):
         if event.type == pg.MOUSEBUTTONDOWN:
@@ -33,44 +35,50 @@ class InputBox:
             if self.active:
                 if event.key == pg.K_RETURN:
                     self.log.append(self.text)
-                    if len(self.log) > 25:
+                    if len(self.log) > self.max_msg:
                         self.log.pop(0)
                     self.text = ''
                 elif event.key == pg.K_BACKSPACE:
                     self.text = self.text[:-1]
-                elif len(self.text) < 40:
+                elif len(self.text) < 60:
                     self.text += event.unicode
 
     def update(self):
         # Render the current text.
-        self.txt_surface = FONT.render(self.text[0:20], True, self.color)
-        self.txt_surface2 = FONT.render(self.text[20:40], True, self.color)
-        self.input_box.w = 300
+        self.txt_surface = FONT.render(self.text[0:30], True, self.color)
+        self.txt_surface2 = FONT.render(self.text[30:60], True, self.color)
+        self.input_box.w = WIDTH / 2
 
     def draw(self, screen):
+        screen.blit(self.txt_surface, (self.input_box.x + 5, self.input_box.y + 5))
+        screen.blit(self.txt_surface2, (self.input_box.x + 5, self.input_box.y + 37))
         if self.c:
-            screen.blit(self.txt_surface, (self.input_box.x + 5, self.input_box.y + 5))
-            screen.blit(self.txt_surface2, (self.input_box.x + 5, self.input_box.y + 37))
             y = 0;
             for msg in self.log:
-                msg_surface = FONT.render(msg[0:20], True, self.color)
-                msg_surface2 = FONT.render(msg[20:40], True, self.color)
+                msg_surface = FONT.render(msg[0:30], True, self.color)
+                msg_surface2 = FONT.render(msg[30:60], True, self.color)
                 screen.blit(msg_surface, (0, y))
                 if len(msg) > 20:
                     y += 20
                 screen.blit(msg_surface2, (0, y))
                 y += 20
-            pg.draw.rect(screen, self.color, self.input_box, 2)
+        else:
+            msg_surface = FONT.render(self.text[0:30], True, self.color)
+            msg_surface2 = FONT.render(self.text[30:60], True, self.color)
+            screen.blit(msg_surface, (WIDTH / 2, 300))
+            screen.blit(msg_surface2, (WIDTH / 2, 320))
+        pg.draw.rect(screen, self.color, self.input_box, 2)
 
 
 class HackBox():
     def __init__(self):
-        self.width, self.height = 600, 600
+        self.width, self.height = WIDTH, HEIGHT
         self.screen = pg.display.set_mode((self.width, self.height))
         pg.display.set_caption("Hackbox")
         self.clock = pg.time.Clock()
-        self.chat_box = InputBox(0, 536, 600, 64, True)
-        self.input_boxes = [self.chat_box]
+        self.chat_box = InputBox(0, HEIGHT - 64, WIDTH / 2, 64, True)
+        self.username_input = InputBox(WIDTH / 2, HEIGHT - 64, WIDTH / 2, 64, False)
+        self.input_boxes = [self.chat_box, self.username_input]
 
     def loadingScreen(self):
         pg.draw.rect(self.screen, 0, (50, 50, 100, 100), 0)
@@ -78,7 +86,7 @@ class HackBox():
         # apply it to text on a label
         label = myfont.render("Loading...", 1, (255, 255, 255))
         # put the label object on the screen at point x=100, y=100
-        self.screen.blit(label, (300, 0))
+        self.screen.blit(label, (WIDTH / 2, 0))
 
     def update(self):
         self.clock.tick(60)
