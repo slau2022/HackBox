@@ -1,15 +1,15 @@
 import pygame as pg
 
 pg.init()
-COLOR_INACTIVE = pg.Color('lightskyblue3')
-COLOR_ACTIVE = pg.Color('dodgerblue2')
+COLOR_INACTIVE = pg.Color("black")
+COLOR_ACTIVE = pg.Color("white")
 WIDTH = 1400
 HEIGHT = 700
 FONT = pg.font.Font(None, 32)
+supFONT = pg.font.Font(None, 80)
 
 
 class InputBox:
-
     def __init__(self, x, y, w, h, c, mx, my, text=''):
         self.input_box = pg.Rect(x, y, w, h)
         self.c = c
@@ -42,7 +42,7 @@ class InputBox:
                     if len(self.log) > self.max_msg:
                         self.log.pop(0)
                     self.text = ''
-                    return self.log[len(self.log) - 1]
+                    return 1
                 elif event.key == pg.K_BACKSPACE:
                     self.text = self.text[:-1]
                 elif len(self.text) < 60:
@@ -58,22 +58,21 @@ class InputBox:
     def draw(self, screen):
         screen.blit(self.txt_surface, (self.input_box.x + 5, self.input_box.y + 5))
         screen.blit(self.txt_surface2, (self.input_box.x + 5, self.input_box.y + 37))
-        if self.mx >= 0 and self.my >= 0:
-            # if self.c:
-            y = self.my;
-            for msg in self.log:
-                msg_surface = FONT.render(msg[0:30], True, self.color)
-                msg_surface2 = FONT.render(msg[30:60], True, self.color)
-                screen.blit(msg_surface, (self.mx, y))
-                if len(msg) > 20:
-                    y += 20
-                screen.blit(msg_surface2, (self.mx, y))
+        #if self.c:
+        y = self.my;
+        for msg in self.log:
+            msg_surface = FONT.render(msg[0:30], True, self.color)
+            msg_surface2 = FONT.render(msg[30:60], True, self.color)
+            screen.blit(msg_surface, (self.mx, y))
+            if len(msg) > 20:
                 y += 20
-        # else:
-        # msg_surface = FONT.render(self.text[0:30], True, self.color)
-        # msg_surface2 = FONT.render(self.text[30:60], True, self.color)
-        # screen.blit(msg_surface, (WIDTH / 2, 300))
-        # screen.blit(msg_surface2, (WIDTH / 2, 320))
+            screen.blit(msg_surface2, (self.mx, y))
+            y += 20
+        #else:
+            #msg_surface = FONT.render(self.text[0:30], True, self.color)
+            #msg_surface2 = FONT.render(self.text[30:60], True, self.color)
+            #screen.blit(msg_surface, (WIDTH / 2, 300))
+            #screen.blit(msg_surface2, (WIDTH / 2, 320))
         pg.draw.rect(screen, self.color, self.input_box, 2)
 
 
@@ -81,45 +80,19 @@ class HackBox():
     def __init__(self):
         self.state = 0
         self.width, self.height = WIDTH, HEIGHT
-        self.screen = pg.display.set_mode((self.width, self.height))
+        self.screen = pg.display.set_mode((WIDTH, HEIGHT))
         pg.display.set_caption("Hackbox")
         self.clock = pg.time.Clock()
         self.chat_box = InputBox(0, HEIGHT - 64, WIDTH / 2, 64, True, 0, 0)
         self.question_input = InputBox(WIDTH / 2, HEIGHT - 64, WIDTH / 2, 64, False, WIDTH / 2, HEIGHT / 2)
-        self.username_input = InputBox(0, HEIGHT - 64, WIDTH / 2, 64, False, WIDTH / 2, HEIGHT / 2)
+        self.username_input = InputBox(WIDTH / 4 + 20, HEIGHT / 3 + 100, WIDTH / 2, 64, False, WIDTH / 2, HEIGHT / 2)
         self.input_boxes = [self.chat_box, self.question_input]
-        self.username = ''
-        self.score = 0
-        self.players = {
-            "Chad":""
-        }
 
     def introScreen(self):
-        label = FONT.render("Please enter a username below", 1, (255, 255, 255))
-        self.screen.blit(label, (0, 0))
-
-    def phase1(self):
-        pass
-    def phase2(self):
-        pass
-    def phase3(self):
-        playerRects = list()
-        playerNames = list()
-        x = WIDTH / 2
-        y = 0
-        for player in self.players:
-            playerRects.append(pg.Rect(x, y, WIDTH / 5, 20))
-            playerNames.append(FONT.render(player, 1, (255, 255, 255)))
-
-            y += 40
-
-
-    def phase4(self):
-        #Very similar to phase2. Maybe just copy paste most of it
-        pass
-
-    def phase5(self):
-        pass
+        title = supFONT.render("HackBox", 1, (255, 255, 255))
+        label = FONT.render("Please enter a username below:", 1, (255, 255, 255))
+        self.screen.blit(title, (WIDTH / 3 + 120, 100))
+        self.screen.blit(label, (WIDTH / 3 + 75, HEIGHT / 3 + 75))
 
     def loadingScreen(self):
         pg.draw.rect(self.screen, 0, (50, 50, 100, 100), 0)
@@ -132,38 +105,17 @@ class HackBox():
     def update(self):
         self.clock.tick(60)
 
-        self.screen.fill(0)
+        self.screen.fill((66, 134, 244))
 
         if self.state == 0:
             hb.introScreen()
             for event in pg.event.get():
                 if event.type == pg.QUIT:
                     exit()
-                self.username = self.username_input.handle_event(event)
-                if self.username != 0:
-                    self.players[self.username] = ""
+                if self.username_input.handle_event(event):
                     self.state += 1
             self.username_input.update()
             self.username_input.draw(self.screen)
-
-        elif self.state == 1:
-            pass
-        elif self.state == 2:
-            pass
-
-        elif self.state == 3:
-            self.phase3()
-            for event in pg.event.get():
-                if event.type == pg.QUIT:
-                    exit()
-                elif event.type == pg.MOUSEBUTTONDOWN:
-                    pass
-
-        elif self.state == 4:
-            pass
-
-        elif self.state == 5:
-            pass
 
         else:
             for event in pg.event.get():
