@@ -17,6 +17,9 @@ class HackBox():
             if event.type == pg.QUIT:
                 exit()
 
+        if pg.mouse.get_pressed()[0]:
+            pos = pg.mouse.get_pos()
+            pg.draw.rect(self.screen, (255, 0, 0), (pos[0], pos[1], 10, 10), 0)
         pg.display.flip()
 
 
