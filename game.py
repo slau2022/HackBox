@@ -42,7 +42,7 @@ class InputBox:
                     if len(self.log) > self.max_msg:
                         self.log.pop(0)
                     self.text = ''
-                    return 1
+                    return self.log[len(self.log) - 1]
                 elif event.key == pg.K_BACKSPACE:
                     self.text = self.text[:-1]
                 elif len(self.text) < 60:
@@ -87,6 +87,7 @@ class HackBox():
         self.question_input = InputBox(WIDTH / 2, HEIGHT - 64, WIDTH / 2, 64, False, WIDTH / 2, HEIGHT / 2)
         self.username_input = InputBox(0, HEIGHT - 64, WIDTH / 2, 64, False, WIDTH / 2, HEIGHT / 2)
         self.input_boxes = [self.chat_box, self.question_input]
+        self.username = ''
 
     def introScreen(self):
         label = FONT.render("Please enter a username below", 1, (255, 255, 255))
@@ -110,7 +111,8 @@ class HackBox():
             for event in pg.event.get():
                 if event.type == pg.QUIT:
                     exit()
-                if self.username_input.handle_event(event):
+                self.username = self.username_input.handle_event(event)
+                if self.username != 0:
                     self.state += 1
             self.username_input.update()
             self.username_input.draw(self.screen)
