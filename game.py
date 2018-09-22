@@ -18,6 +18,14 @@ class HackBox():
         self.log = list()
         self.max_msg = 25;
 
+    def loadingScreen(self):
+        pygame.draw.rect(self.screen, 0, (50,50,100,100), 0)
+        myfont = pg.font.SysFont("Comic Sans MS", 30)
+        # apply it to text on a label
+        label = myfont.render("Loading...", 1, (255,255,255))
+        # put the label object on the screen at point x=100, y=100
+        self.screen.blit(label, (100, 100))
+    
     def update(self):
         self.clock.tick(60)
 
