@@ -92,6 +92,17 @@ class HackBox():
     def introScreen(self):
         label = FONT.render("Please enter a username below", 1, (255, 255, 255))
         self.screen.blit(label, (0, 0))
+        
+    def phase1(self):
+        
+    def phase2(self):
+        
+    def phase3(self):
+        
+    def phase4(self):
+    #Very similar to phase2. Maybe just copy paste most of it
+    
+    def phase5(self):
 
     def loadingScreen(self):
         pg.draw.rect(self.screen, 0, (50, 50, 100, 100), 0)
